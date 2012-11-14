@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" implements="ssen.mvc.IDependent">
+	<fx:Script>
+		<![CDATA[
+			import de.polygonal.ds.TreeNode;
+
+			import ssen.datakit.tokens.IAsyncToken;
+			import ssen.mvc.IEventBus;
+			import ssen.mvc.IInjector;
+			import ssen.srcviewer.model.Doc;
+			import ssen.srcviewer.model.SrcModel;
+			import ssen.srcviewer.view.pool.FileListNodePool;
+
+			[Inject]
+			public var srcmodel:SrcModel;
+
+			[Inject]
+			public var eventBus:IEventBus;
+
+			[Inject]
+			public var injector:IInjector;
+
+			private var fnodes:Vector.<FileListNode>;
+
+			public function onDependent():void {
+				eventBus.addEventListener(ViewEvent.REFRESH_LIST, refreshList);
+				refreshList();
+			}
+
+			private function refreshList(event:ViewEvent=null):void {
+				removeAllElements();
+
+				if (fnodes !== null) {
+					FileListNodePool.getInstance().putNodes(fnodes);
+				} else {
+					fnodes=new Vector.<FileListNode>;
+				}
+
+				var token:IAsyncToken=srcmodel.getSrcTree();
+				token.result=function(root:TreeNode):void {
+					root.preorder(treeloop);
+				};
+			}
+
+			private function treeloop(node:TreeNode, preflight:Boolean, userData:Dynamic):Boolean {
+				if (!node.isRoot()) {
+					var fnode:FileListNode;
+
+					if (node.isLeaf() && node.val is Doc) {
+						fnode=FileListNodePool.getInstance().getNode(true);
+					} else if (node.hasChildren() && node.val.toString().charAt(0) !== "@") {
+						fnode=FileListNodePool.getInstance().getNode(false);
+					}
+
+					if (fnode) {
+						fnode.eventBus=eventBus;
+						fnode.setNode(node);
+						addElement(fnode);
+						fnodes.push(fnode);
+					}
+				}
+
+				return true;
+			}
+		]]>
+	</fx:Script>
+
+	<s:layout>
+		<s:VerticalLayout/>
+	</s:layout>
+</s:Group>

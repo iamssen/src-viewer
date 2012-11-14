@@ -1,0 +1,94 @@
+package ssen.srcviewer.view {
+import flash.events.Event;
+import flash.geom.Rectangle;
+import flash.media.StageWebView;
+
+import mx.core.FlexHTMLLoader;
+
+import ssen.mvc.IContextView;
+import ssen.mvc.IDependent;
+import ssen.mvc.IEventBus;
+import ssen.srcviewer.model.DocEvent;
+import ssen.srcviewer.model.DocModel;
+
+public class DocViewer extends FlexHTMLLoader implements IDependent {
+	[Inject]
+	public var eventBus:IEventBus;
+
+	[Inject]
+	public var docmodel:DocModel;
+
+	[Inject]
+	public var contextView:IContextView;
+
+	//	private var webview:StageWebView;
+
+	public var viewport:Rectangle=new Rectangle;
+
+	public function onDependent():void {
+		webview=new StageWebView;
+		webview.stage=contextView.stage;
+
+		eventBus.addEventListener(DocEvent.CHANGED_DOC, drawDoc);
+		eventBus.addEventListener(ViewEvent.REFRESH_DOC, drawDoc);
+	}
+
+	public function refreshViewport():void {
+		webview.viewPort=viewport;
+	}
+
+	private function drawDoc(event:Event):void {
+		if (docmodel.currentDoc !== null) {
+			webview.loadString(docmodel.currentDoc.toHtml());
+				//			txt.text=docmodel.currentDoc.toHtml();
+		}
+	}
+}
+}
+
+
+
+import flash.events.Event;
+import flash.geom.Rectangle;
+import flash.media.StageWebView;
+
+import ssen.mvc.IContextView;
+import ssen.mvc.IDependent;
+import ssen.mvc.IEventBus;
+import ssen.srcviewer.model.DocEvent;
+import ssen.srcviewer.model.DocModel;
+import ssen.srcviewer.view.ViewEvent;
+
+class Backup implements IDependent {
+	[Inject]
+	public var eventBus:IEventBus;
+
+	[Inject]
+	public var docmodel:DocModel;
+
+	[Inject]
+	public var contextView:IContextView;
+
+	private var webview:StageWebView;
+
+	public var viewport:Rectangle=new Rectangle;
+
+	public function onDependent():void {
+		webview=new StageWebView;
+		webview.stage=contextView.stage;
+
+		eventBus.addEventListener(DocEvent.CHANGED_DOC, drawDoc);
+		eventBus.addEventListener(ViewEvent.REFRESH_DOC, drawDoc);
+	}
+
+	public function refreshViewport():void {
+		webview.viewPort=viewport;
+	}
+
+	private function drawDoc(event:Event):void {
+		if (docmodel.currentDoc !== null) {
+			webview.loadString(docmodel.currentDoc.toHtml());
+				//			txt.text=docmodel.currentDoc.toHtml();
+		}
+	}
+}

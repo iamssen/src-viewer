@@ -1,0 +1,24 @@
+<mockup version="1.0" skin="sketch" measuredW="148" measuredH="45" mockupW="88" mockupH="25">
+  <controls>
+    <control controlID="0" controlTypeID="__group__" x="60" y="20" w="88" h="25" measuredW="88" measuredH="25" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <controlName>searchbar</controlName>
+      </controlProperties>
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Icon" x="0" y="0" w="-1" h="-1" measuredW="24" measuredH="24" zOrder="0" locked="false" isInGroup="0">
+          <controlProperties>
+            <color>16777215</color>
+            <icon>SearchIcon%7Csmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Label" x="34" y="1" w="-1" h="-1" measuredW="54" measuredH="24" zOrder="1" locked="false" isInGroup="0">
+          <controlProperties>
+            <color>16777215</color>
+            <size>16</size>
+            <text>%uAC80%uC0C9%uC5B4</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+  </controls>
+</mockup>

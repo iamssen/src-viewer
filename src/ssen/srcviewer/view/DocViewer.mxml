@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" implements="ssen.mvc.IDependent"
+		 xmlns:components="ssen.uikit.components.*">
+	<fx:Script>
+		<![CDATA[
+			import ssen.mvc.IEventBus;
+			import ssen.srcviewer.model.DocEvent;
+			import ssen.srcviewer.model.DocModel;
+
+			[Inject]
+			public var eventBus:IEventBus;
+
+			[Inject]
+			public var docmodel:DocModel;
+
+			public function onDependent():void {
+				eventBus.addEventListener(DocEvent.CHANGED_DOC, drawDoc);
+				eventBus.addEventListener(ViewEvent.REFRESH_DOC, drawDoc);
+			}
+
+			private function drawDoc(event:Event):void {
+				if (docmodel.currentDoc !== null) {
+					htmlview.loadString(docmodel.currentDoc.toHtml());
+				}
+			}
+		]]>
+	</fx:Script>
+
+	<components:HtmlView id="htmlview" width="{width}" height="{height}"/>
+	<s:VScrollBar viewport="{htmlview}" right="0" height="{height}"/>
+	<!--<s:VScrollBar viewport="{htmlview}" right="0" height="{height - 15}"/>
+	<s:HScrollBar viewport="{htmlview}" bottom="0" width="{width - 15}"/>-->
+
+</s:Group>

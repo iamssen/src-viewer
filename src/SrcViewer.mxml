@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" invoke="invokeHandler(event)"
+					   showStatusBar="false">
+	<fx:Script>
+		<![CDATA[
+			import ssen.srcviewer.SrcViewerWindow;
+			import ssen.srcviewer.model.SrcModel;
+			import ssen.srcviewer.view.LRDivededContainer;
+			import ssen.srcviewer.view.Reader;
+
+			private var _invokeArguments:Array;
+			private var _initialized:Boolean;
+
+			// 1. 어쨌든 실행하면 invoke 는 실행된다. 업데이트 실행을 확인하거나, argument 를 저장하는 역할을 한다
+
+			private var ssen_uikit_containers_LeftAndRightSplitContainer_obj:ssen.srcviewer.view.LRDivededContainer;
+
+			private var ssen_srcviewer_view_Reader_obj:ssen.srcviewer.view.Reader;
+
+			private function invokeHandler(event:InvokeEvent):void {
+				_invokeArguments=event.arguments;
+
+				if (_initialized) {
+					createWindow();
+				} else {
+					checkUpdate();
+				}
+
+				_initialized=true;
+			}
+
+			// 2. 업데이트 체크
+			private function checkUpdate():void {
+				// update check
+
+				// if update 를 안해도 될때
+				close();
+				createWindow();
+			}
+
+			// 3. Window 만들기
+			private function createWindow(readArguments:Boolean=true):void {
+				var srcmodel:SrcModel=new SrcModel;
+
+				if (_invokeArguments.length === 0) {
+					registerWindow(srcmodel);
+				} else {
+					srcmodel.readSrcViewFile(_invokeArguments[0], function(success:Boolean):void {
+						if (success) {
+							registerWindow(srcmodel);
+						} else {
+							// alert ??? 
+						}
+					});
+				}
+
+				_invokeArguments=null;
+			}
+
+			private function registerWindow(model:SrcModel):void {
+				var window:SrcViewerWindow;
+				window=new SrcViewerWindow;
+				window.srcmodel=model;
+				window.newWindowCallback=openNewWindow;
+				window.open();
+			}
+
+			private function openNewWindow():void {
+				registerWindow(new SrcModel);
+			}
+		]]>
+	</fx:Script>
+</s:WindowedApplication>

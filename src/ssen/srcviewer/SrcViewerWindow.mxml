@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Window xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" addedToStage="initialContext()"
+		  xmlns:tracers="ssen.devkit.tracers.*" xmlns:devkit="ssen.devkit.*" implements="ssen.mvc.IContextView" width="1500" height="950"
+		  showStatusBar="false" close="closeWindow(event)">
+
+	<fx:Script>
+		<![CDATA[
+			import ssen.mvc.IContext;
+			import ssen.srcviewer.model.SrcModel;
+
+			public var srcmodel:SrcModel;
+			public var newWindowCallback:Function;
+
+			private var context:SrcViewerWindowContext;
+
+			/** @inheritDoc */
+			public function get contextInitialized():Boolean {
+				return context !== null;
+			}
+
+			/** @inheritDoc */
+			public function initialContext(parentContext:IContext=null):void {
+				if (context === null) {
+					context=new SrcViewerWindowContext(this, srcmodel, parentContext);
+					stage.addEventListener(KeyboardEvent.KEY_UP, stageKeyUpHandler);
+				}
+			}
+
+			private function closeWindow(event:Event):void {
+				newWindowCallback=null;
+			}
+
+			private function stageKeyUpHandler(event:KeyboardEvent):void {
+				if (event.controlKey && event.keyCode === Keyboard.N && newWindowCallback !== null) {
+					newWindowCallback();
+				}
+			}
+		]]>
+	</fx:Script>
+</s:Window>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" implements="ssen.mvc.IDependent">
+	<fx:Script>
+		<![CDATA[
+			import ssen.mvc.IEventBus;
+			import ssen.srcviewer.model.SrcModel;
+			import ssen.srcviewer.view.components.HistoryOpener;
+
+			[Inject]
+			public var srcmodel:SrcModel;
+
+			[Inject]
+			public var eventBus:IEventBus;
+
+			private function create():void {
+				srcmodel.createSrcViewFile(function(created:Boolean):void {
+					if (created) {
+						eventBus.dispatchEvent(new ViewEvent(ViewEvent.OPEN_SRC_READER));
+					}
+				});
+			}
+
+			private function open():void {
+				srcmodel.openSrcViewFile(function(success:Boolean):void {
+					if (success) {
+						eventBus.dispatchEvent(new ViewEvent(ViewEvent.OPEN_SRC_READER));
+					}
+				});
+			}
+
+			private function read(path:String):void {
+				srcmodel.readSrcViewFile(path, function(success:Boolean):void {
+					if (success) {
+						eventBus.dispatchEvent(new ViewEvent(ViewEvent.OPEN_SRC_READER));
+					}
+				});
+			}
+
+			public function onDependent():void {
+				srcmodel.getHistory(function(list:Array):void {
+
+					if (list.length > 0) {
+						var btn:HistoryOpener;
+
+						var f:int=-1;
+						var fmax:int=list.length;
+						while (++f < fmax) {
+							btn=new HistoryOpener;
+							btn.path=list[f];
+							btn.label=list[f];
+							btn.callback=read;
+							btn.width=620;
+							history.addElement(btn);
+						}
+					}
+				});
+			}
+
+			private function clearAllHistory():void {
+				srcmodel.removeAllHistory();
+				history.removeAllElements();
+			}
+		]]>
+	</fx:Script>
+
+	<s:layout>
+		<s:VerticalLayout gap="30" horizontalAlign="center" verticalAlign="middle"/>
+	</s:layout>
+
+	<!-- new / open -->
+	<s:Group>
+		<s:layout>
+			<s:HorizontalLayout gap="10"/>
+		</s:layout>
+
+		<s:Button label="create" width="200" height="80" click="create()"/>
+		<s:Button label="open" width="200" height="80" click="open()"/>
+		<s:Button label="clear all history" width="200" height="80" click="clearAllHistory()"/>
+	</s:Group>
+
+	<!-- file history -->
+	<s:Scroller>
+		<s:Group id="history">
+			<s:layout>
+				<s:VerticalLayout/>
+			</s:layout>
+		</s:Group>
+	</s:Scroller>
+</s:Group>
