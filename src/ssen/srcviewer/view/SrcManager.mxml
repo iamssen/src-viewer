@@ -4,8 +4,6 @@
 
 	<fx:Script>
 		<![CDATA[
-			import flex.lang.reflect.Field;
-
 			import ssen.mvc.IEventBus;
 			import ssen.srcviewer.model.SrcModel;
 

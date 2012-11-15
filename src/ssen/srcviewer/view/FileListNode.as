@@ -85,7 +85,7 @@ public class FileListNode extends SpriteVisualElement implements IDisposable {
 		_width=textLine.x + textLine.width;
 		_height=HEIGHT;
 
-		graphics.beginFill(0xffffff);
+		graphics.beginFill(0xffffff, 0);
 		graphics.drawRect(0, 0, _width, _height);
 		graphics.endFill();
 

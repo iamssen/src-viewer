@@ -57,26 +57,23 @@ public class Doc {
 				}
 
 				hash=MathUtils.randHex(10);
-				wikis+=StringUtils.formatToString('<h1>{0}</h1><script type="text/markdown" to="{2}">\n{1}\n</script><div class="markdown" id="{2}"></div>',
-												  file.name + "." + file.extension, file.getSource(), hash);
+				wikis+='<h1>'+file.name + "." + file.extension+'</h1><xmp type="text/markdown" to="'+hash+'" style="display:none;">\n'+file.getSource()+'\n</xmp><div class="markdown" id="'+hash+'"></div>';
 			} else {
 				if (!baseIsWiki) {
 					base=file.file.parent.nativePath;
 				}
 
 				if (file is Code) {
-					codes+=StringUtils.formatToString('<h1>{0}</h1><pre><code class="language-{2}"><xmp>{1}</xmp></code></pre>',
-													  file.name + "." + file.extension, file.getSource(), file.highlighterType);
+					codes+='<h1>'+file.name + "." + file.extension+'</h1><pre><code class="language-'+file.highlighterType+'"><xmp>'+file.getSource()+'</xmp></code></pre>';
 				} else {
-					examples+=StringUtils.formatToString('<h1>{0}</h1><pre><code class="language-{2}">{1}</code></pre>',
-														 file.name + "." + file.extension, file.getSource(), file.highlighterType);
+					examples+='<h1>'+file.name + "." + file.extension+'</h1><pre><code class="language-'+file.highlighterType+'"><xmp>'+file.getSource()+'</xmp></code></pre>';
 				}
 
 
 			}
 		}
 
-		var source:String='<!DOCTYPE html><html><head><base href="file:///' + base.replace(/\\/g, "/") + '/" /><link href="app:/doc.css" rel="stylesheet" /><link href="app:/prism.css" rel="stylesheet" /><script src="app:/marked.js" type="application/javascript"></script></head><body>' + wikis + codes + examples + '<script src="app:/prism.js" data-default-language="none"></script><script src="app:/doc.js"></script></body></html>';
+		var source:String='<!DOCTYPE html><html><head><base href="file:///' + base.replace(/\\/g, "/") + '/" /><link href="app:/Clearness.css" rel="stylesheet" /><link href="app:/doc.css" rel="stylesheet" /><link href="app:/prism.css" rel="stylesheet" /><script src="app:/showdown.js" type="application/javascript"></script></head><body>' + wikis + codes + examples + '<script src="app:/prism.js" data-default-language="none"></script><script src="app:/doc.js"></script></body></html>';
 
 		trace("Doc.toHtml()", source);
 
