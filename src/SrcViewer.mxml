@@ -5,7 +5,7 @@
 		<![CDATA[
 			import ssen.srcviewer.SrcViewerWindow;
 			import ssen.srcviewer.model.SrcModel;
-			import ssen.srcviewer.view.LRDivededContainer;
+			import ssen.srcviewer.view.LRHexaDivededContainer;
 			import ssen.srcviewer.view.Reader;
 
 			private var _invokeArguments:Array;
@@ -13,7 +13,7 @@
 
 			// 1. 어쨌든 실행하면 invoke 는 실행된다. 업데이트 실행을 확인하거나, argument 를 저장하는 역할을 한다
 
-			private var ssen_uikit_containers_LeftAndRightSplitContainer_obj:ssen.srcviewer.view.LRDivededContainer;
+			private var ssen_uikit_containers_LeftAndRightSplitContainer_obj:ssen.srcviewer.view.LRHexaDivededContainer;
 
 			private var ssen_srcviewer_view_Reader_obj:ssen.srcviewer.view.Reader;
 

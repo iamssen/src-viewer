@@ -32,6 +32,7 @@
 
 				if (fnodes !== null) {
 					FileListNodePool.getInstance().putNodes(fnodes);
+					fnodes.length=0;
 				} else {
 					fnodes=new Vector.<FileListNode>;
 				}
@@ -66,6 +67,6 @@
 	</fx:Script>
 
 	<s:layout>
-		<s:VerticalLayout/>
+		<s:VerticalLayout gap="0"/>
 	</s:layout>
 </s:Group>

@@ -1,6 +1,8 @@
 package ssen.srcviewer.view {
 import de.polygonal.ds.TreeNode;
 
+import flash.display.BitmapData;
+import flash.geom.Matrix;
 import flash.geom.Rectangle;
 import flash.text.engine.TextLine;
 
@@ -16,6 +18,33 @@ import ssen.common.IDisposable;
 import ssen.mvc.IEventBus;
 
 public class FileListNode extends SpriteVisualElement implements IDisposable {
+	[Embed(source="assets/left.doc.png")]
+	public static var DocImage:Class;
+
+	[Embed(source="assets/left.folder.png")]
+	public static var FolderImage:Class;
+
+	private static var docImage:BitmapData;
+	private static var folderImage:BitmapData;
+
+	private static function getDocImage():BitmapData {
+		if (docImage === null) {
+			docImage=new DocImage().bitmapData;
+		}
+
+		return docImage;
+	}
+
+	private static function getFolderImage():BitmapData {
+		if (folderImage === null) {
+			folderImage=new FolderImage().bitmapData;
+		}
+
+		return folderImage;
+	}
+
+	private static var mat:Matrix=new Matrix;
+
 	private static const WIDTH:int=1000;
 	private static const HEIGHT:int=25;
 	private static var factory:StringTextLineFactory;
@@ -26,6 +55,7 @@ public class FileListNode extends SpriteVisualElement implements IDisposable {
 	private var textLine:TextLine;
 	private var _width:int;
 	private var _height:int;
+	private static var iconMatrix:Matrix;
 
 	public static function getFactory():StringTextLineFactory {
 		if (factory) {
@@ -47,7 +77,7 @@ public class FileListNode extends SpriteVisualElement implements IDisposable {
 		saveInfo(node);
 
 		var factory:StringTextLineFactory=getFactory();
-		factory.compositionBounds.x=(node.depth() - 1) * 15;
+		factory.compositionBounds.x=((node.depth() - 1) * 12) + 24;
 		factory.compositionBounds.width=WIDTH - factory.compositionBounds.x;
 		factory.text=getLabelText();
 		factory.createTextLines(createdTextLines);
@@ -55,8 +85,16 @@ public class FileListNode extends SpriteVisualElement implements IDisposable {
 		_width=textLine.x + textLine.width;
 		_height=HEIGHT;
 
-		graphics.beginFill(0xffffff, 0.3);
+		graphics.beginFill(0xffffff);
 		graphics.drawRect(0, 0, _width, _height);
+		graphics.endFill();
+
+		var icon:BitmapData=isDoc ? getDocImage() : getFolderImage();
+		mat.identity();
+		mat.translate(textLine.x - 17, 6);
+
+		graphics.beginBitmapFill(icon, mat);
+		graphics.drawRect(mat.tx, mat.ty, icon.width, icon.height);
 		graphics.endFill();
 
 		addInteraction();
@@ -65,9 +103,11 @@ public class FileListNode extends SpriteVisualElement implements IDisposable {
 	public function dispose():void {
 		graphics.clear();
 
-		removeChild(textLine);
-		TextLineRecycler.addLineForReuse(textLine);
-		textLine=null;
+		if (textLine) {
+			removeChild(textLine);
+			TextLineRecycler.addLineForReuse(textLine);
+			textLine=null;
+		}
 	}
 
 	protected function saveInfo(node:TreeNode):void {

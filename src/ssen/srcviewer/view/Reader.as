@@ -1,23 +1,29 @@
 package ssen.srcviewer.view {
+import flash.display.BitmapData;
 import flash.display.Shape;
+import flash.geom.Matrix;
 import flash.geom.Rectangle;
 
 import mx.core.IVisualElement;
+import mx.graphics.SolidColor;
 
 import spark.components.VScrollBar;
 import spark.core.SpriteVisualElement;
+import spark.primitives.BitmapImage;
+import spark.primitives.Rect;
 
 import ssen.common.MathUtils;
 import ssen.srcviewer.view.skins.SimpleVScrollBarSkin;
 
-public class Reader extends LRDivededContainer {
-	private var tls:Shape;
-	private var trs:Shape;
-	private var mls:Shape;
-	private var mrs:Shape;
-	private var bls:Shape;
-	private var brs:Shape;
-	private var container:SpriteVisualElement;
+public class Reader extends LRQuadDividedContainer {
+	[Embed(source="assets/bottom.background.png")]
+	public static var BottomBGImage:Class;
+
+	[Embed(source="assets/bottom.resizer.png")]
+	public static var BottomResizerImage:Class;
+
+	private var bottomBackground:BitmapImage;
+
 	private var fileListRefresh:FileListRefresher;
 	private var fileList:FileList;
 	private var fileListScrollbar:VScrollBar;
@@ -25,9 +31,11 @@ public class Reader extends LRDivededContainer {
 	private var docLocationOpener:DocLocationOpener;
 	private var docRefresher:DocRefresher;
 	private var docViewer:DocViewer;
+	private var leftBackground:Rect;
+	private var leftLine:Rect;
 
 	public function Reader() {
-		super(280, 30, 50);
+		super(300, 29);
 		minLeft=200;
 		maxLeft=370;
 	}
@@ -35,42 +43,19 @@ public class Reader extends LRDivededContainer {
 	/** @inheritDoc */
 	override protected function startup():void {
 		//----------------------------------------------------------------
-		// test backgrounds
+		// graphcis
 		//----------------------------------------------------------------
-		tls=new Shape;
-		tls.graphics.beginFill(MathUtils.rand(0x000000, 0xffffff));
-		tls.graphics.drawRect(0, 0, 10, 10);
-		tls.graphics.endFill();
-		trs=new Shape;
-		trs.graphics.beginFill(MathUtils.rand(0x000000, 0xffffff));
-		trs.graphics.drawRect(0, 0, 10, 10);
-		trs.graphics.endFill();
-		mls=new Shape;
-		mls.graphics.beginFill(MathUtils.rand(0x000000, 0xffffff));
-		mls.graphics.drawRect(0, 0, 10, 10);
-		mls.graphics.endFill();
-		mrs=new Shape;
-		mrs.graphics.beginFill(MathUtils.rand(0x000000, 0xffffff));
-		mrs.graphics.drawRect(0, 0, 10, 10);
-		mrs.graphics.endFill();
-		bls=new Shape;
-		bls.graphics.beginFill(MathUtils.rand(0x000000, 0xffffff));
-		bls.graphics.drawRect(0, 0, 10, 10);
-		bls.graphics.endFill();
-		brs=new Shape;
-		brs.graphics.beginFill(MathUtils.rand(0x000000, 0xffffff));
-		brs.graphics.drawRect(0, 0, 10, 10);
-		brs.graphics.endFill();
+		bottomBackground=new BitmapImage;
+		bottomBackground.source=BottomBGImage;
+		addElementAt(bottomBackground, 0);
 
-		container=new SpriteVisualElement;
-		container.addChild(tls);
-		container.addChild(trs);
-		container.addChild(mls);
-		container.addChild(mrs);
-		container.addChild(bls);
-		container.addChild(brs);
-		addElementAt(container, 0);
+		leftLine=new Rect;
+		leftLine.fill=new SolidColor(0x999999);
+		addElementAt(leftLine, 0);
 
+		leftBackground=new Rect;
+		leftBackground.fill=new SolidColor(0xe6ecf1);
+		addElementAt(leftBackground, 0);
 		//----------------------------------------------------------------
 		// parts
 		//----------------------------------------------------------------
@@ -101,29 +86,7 @@ public class Reader extends LRDivededContainer {
 
 	/** @inheritDoc */
 	override protected function shutdown():void {
-		container.removeChild(tls);
-		tls.graphics.clear();
-		tls=null;
-		container.removeChild(trs);
-		trs.graphics.clear();
-		trs=null;
-		container.removeChild(mls);
-		mls.graphics.clear();
-		mls=null;
-		container.removeChild(mrs);
-		mrs.graphics.clear();
-		mrs=null;
-		container.removeChild(bls);
-		bls.graphics.clear();
-		bls=null;
-		container.removeChild(brs);
-		brs.graphics.clear();
-		brs=null;
-
-
 		removeAllElements();
-
-		container=null;
 
 		// middle left
 		fileList=null;
@@ -139,10 +102,7 @@ public class Reader extends LRDivededContainer {
 	}
 
 	override protected function updateSpaceOfBottomLeft(space:Rectangle):void {
-		bls.x=space.x;
-		bls.y=space.y;
-		bls.width=space.width;
-		bls.height=space.height;
+		resizeBottomGraphics(space.y);
 
 		fileListRefresh.x=space.x + 10;
 		fileListRefresh.y=space.y + int(space.height / 2) - int(fileListRefresh.height / 2);
@@ -152,10 +112,7 @@ public class Reader extends LRDivededContainer {
 	}
 
 	override protected function updateSpaceOfBottomRight(space:Rectangle):void {
-		brs.x=space.x;
-		brs.y=space.y;
-		brs.width=space.width;
-		brs.height=space.height;
+		resizeBottomGraphics(space.y);
 
 		docRefresher.x=space.x + space.width - docRefresher.width - 10;
 		docRefresher.y=space.y + int(space.height / 2) - int(docRefresher.height / 2);
@@ -164,11 +121,16 @@ public class Reader extends LRDivededContainer {
 		docLocationOpener.y=space.y + int(space.height / 2) - int(docLocationOpener.height / 2);
 	}
 
-	override protected function updateSpaceOfMiddleLeft(space:Rectangle):void {
-		mls.x=space.x;
-		mls.y=space.y;
-		mls.width=space.width;
-		mls.height=space.height;
+	override protected function updateSpaceOfTopLeft(space:Rectangle):void {
+		leftBackground.x=space.x;
+		leftBackground.y=space.y;
+		leftBackground.width=space.width;
+		leftBackground.height=space.height;
+
+		leftLine.x=space.x + space.width - 1;
+		leftLine.y=space.y;
+		leftLine.width=1;
+		leftLine.height=space.height;
 
 		fileList.x=space.x;
 		fileList.y=space.y;
@@ -180,44 +142,31 @@ public class Reader extends LRDivededContainer {
 		fileListScrollbar.height=space.height;
 	}
 
-	override protected function updateSpaceOfMiddleRight(space:Rectangle):void {
-		mrs.x=space.x;
-		mrs.y=space.y;
-		mrs.width=space.width;
-		mrs.height=space.height;
-
+	override protected function updateSpaceOfTopRight(space:Rectangle):void {
 		docViewer.x=space.x;
 		docViewer.y=space.y;
 		docViewer.width=space.width;
 		docViewer.height=space.height;
-
-		//		docViewer.viewport.x=space.x;
-		//		docViewer.viewport.y=space.y;
-		//		docViewer.viewport.width=space.width;
-		//		docViewer.viewport.height=space.height;
-		//		docViewer.refreshViewport();
-	}
-
-	override protected function updateSpaceOfTopLeft(space:Rectangle):void {
-		tls.x=space.x;
-		tls.y=space.y;
-		tls.width=space.width;
-		tls.height=space.height;
-	}
-
-	override protected function updateSpaceOfTopRight(space:Rectangle):void {
-		trs.x=space.x;
-		trs.y=space.y;
-		trs.width=space.width;
-		trs.height=space.height;
 	}
 
 	override protected function getResizer():IVisualElement {
+		var bitmap:BitmapData=new BottomResizerImage().bitmapData;
+		var hw:int=(bitmap.width / 2) + 1;
+		var hh:int=bitmap.height / 2;
+
+		var mat:Matrix=new Matrix;
+		mat.translate(-hw, -hh);
+
 		var sp:SpriteVisualElement=new SpriteVisualElement;
-		sp.graphics.beginFill(0x000000);
-		sp.graphics.drawCircle(0, 0, 10);
+		sp.graphics.beginBitmapFill(bitmap, mat);
+		sp.graphics.drawRect(-hw, -hh, bitmap.width, bitmap.height);
 		sp.graphics.endFill();
 		return sp;
+	}
+
+	private function resizeBottomGraphics(y:int):void {
+		bottomBackground.y=y;
+		bottomBackground.width=stage.stageWidth;
 	}
 }
 }

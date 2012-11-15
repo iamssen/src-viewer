@@ -37,9 +37,9 @@ public class SrcViewerWindowMediator implements IMediator {
 
 	private function openSrcManager(event:ViewEvent):void {
 		srcManager=new SrcManager;
-		
+
 		viewOuterBridge.ready(srcManager);
-		
+
 		PopUpManager.addPopUp(srcManager, view, true);
 		PopUpManager.centerPopUp(srcManager);
 
@@ -55,6 +55,10 @@ public class SrcViewerWindowMediator implements IMediator {
 			eventBus.addEventListener(ViewEvent.OPEN_SRC_MANAGER, openSrcManager);
 
 			PopUpManager.removePopUp(srcManager);
+
+			srcManager=null;
+
+			eventBus.dispatchEvent(new ViewEvent(ViewEvent.REFRESH_LIST));
 		}
 	}
 

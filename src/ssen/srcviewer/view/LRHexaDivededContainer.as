@@ -8,7 +8,7 @@ import mx.core.IVisualElement;
 
 import spark.components.Group;
 
-public class LRDivededContainer extends Group {
+public class LRHexaDivededContainer extends Group {
 
 	public var minLeft:int=100;
 	public var maxLeft:int=300;
@@ -26,7 +26,7 @@ public class LRDivededContainer extends Group {
 	private var _dx:Number;
 	private var _rx:Number;
 
-	public function LRDivededContainer(left:int=200, top:int=50, bottom:int=50) {
+	public function LRHexaDivededContainer(left:int=200, top:int=50, bottom:int=50) {
 		lw=left;
 		th=top;
 		bh=bottom;

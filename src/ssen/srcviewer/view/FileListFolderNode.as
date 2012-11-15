@@ -6,7 +6,7 @@ public class FileListFolderNode extends FileListNode {
 
 
 	override protected function getLabelText():String {
-		return "/" + _name;
+		return _name;
 	}
 
 	override protected function saveInfo(node:TreeNode):void {

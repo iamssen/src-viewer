@@ -2,12 +2,11 @@ package ssen.srcviewer.view.components {
 import flash.events.Event;
 import flash.events.MouseEvent;
 
-import spark.components.Button;
-
 import ssen.mvc.IDependent;
 import ssen.mvc.IEventBus;
+import ssen.uikit.components.BitmapButton;
 
-public class EventTrigger extends Button implements IDependent {
+public class EventTrigger extends BitmapButton implements IDependent {
 
 	[Inject]
 	public var eventBus:IEventBus;
