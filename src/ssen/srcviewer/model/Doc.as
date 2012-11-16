@@ -17,6 +17,8 @@ public class Doc {
 	private var _name:String;
 	private var _map:HashMap;
 	private var _source:String;
+	
+	public var namespace:String;
 
 	public function Doc(name:String) {
 		_name=name;
@@ -57,25 +59,25 @@ public class Doc {
 				}
 
 				hash=MathUtils.randHex(10);
-				wikis+='<h1>'+file.name + "." + file.extension+'</h1><xmp type="text/markdown" to="'+hash+'" style="display:none;">\n'+file.getSource()+'\n</xmp><div class="markdown" id="'+hash+'"></div>';
+				wikis+='<h1 class="paper-title">'+file.name + "." + file.extension+'</h1><div class="paper"><xmp type="text/markdown" to="'+hash+'" style="display:none;">\n'+file.getSource()+'\n</xmp><div class="markdown" id="'+hash+'"></div></div>';
 			} else {
 				if (!baseIsWiki) {
 					base=file.file.parent.nativePath;
 				}
 
 				if (file is Code) {
-					codes+='<h1>'+file.name + "." + file.extension+'</h1><pre><code class="language-'+file.highlighterType+'"><xmp>'+file.getSource()+'</xmp></code></pre>';
+					codes+='<h1 class="paper-title">'+file.name + "." + file.extension+'</h1><div class="paper"><pre><code class="language-'+file.highlighterType+'"><xmp>'+file.getSource()+'</xmp></code></pre></div>';
 				} else {
-					examples+='<h1>'+file.name + "." + file.extension+'</h1><pre><code class="language-'+file.highlighterType+'"><xmp>'+file.getSource()+'</xmp></code></pre>';
+					examples+='<h1 class="paper-title">'+file.name + "." + file.extension+'</h1><div class="paper"><pre><code class="language-'+file.highlighterType+'"><xmp>'+file.getSource()+'</xmp></code></pre></div>';
 				}
 
 
 			}
 		}
 
-		var source:String='<!DOCTYPE html><html><head><base href="file:///' + base.replace(/\\/g, "/") + '/" /><link href="app:/Clearness.css" rel="stylesheet" /><link href="app:/doc.css" rel="stylesheet" /><link href="app:/prism.css" rel="stylesheet" /><script src="app:/showdown.js" type="application/javascript"></script></head><body>' + wikis + codes + examples + '<script src="app:/prism.js" data-default-language="none"></script><script src="app:/doc.js"></script></body></html>';
+		var source:String='<!DOCTYPE html><html><head><base href="file:///' + base.replace(/\\/g, "/") + '/" /><link href="app:/doc.css" rel="stylesheet" /><script src="app:/showdown.js" type="application/javascript"></script></head><body>' + wikis + codes + examples + '<script src="app:/prism.js" data-default-language="none"></script><script src="app:/doc.js"></script></body></html>';
 
-		trace("Doc.toHtml()", source);
+//		trace("Doc.toHtml()", source);
 
 		return source;
 	}

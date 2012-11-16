@@ -27,6 +27,7 @@
 	</fx:Script>
 
 	<components:HtmlView id="htmlview" width="{width}" height="{height}"/>
+	<s:VScrollBar viewport="{htmlview}" left="0" height="{height}" skinClass="ssen.srcviewer.view.skins.SimpleVScrollBarSkin"/>
 	<s:VScrollBar viewport="{htmlview}" right="0" height="{height}" skinClass="ssen.srcviewer.view.skins.SimpleVScrollBarSkin"/>
 	<!--<s:VScrollBar viewport="{htmlview}" right="0" height="{height - 15}"/>
 	<s:HScrollBar viewport="{htmlview}" bottom="0" width="{width - 15}"/>-->

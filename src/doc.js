@@ -11,7 +11,7 @@ function parseDoc() {
 	
 	while(++f < fmax) {
 		script=scripts[f];
-		if (script.attributes.type.nodeValue === "text/markdown") {
+		if (script.attributes.type !== undefined && script.attributes.type.nodeValue === "text/markdown") {
 			hash=script.attributes.to.nodeValue;
 			source=script.innerText;
 //			source=source.replace(/</g, "&lt;");

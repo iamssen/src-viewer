@@ -154,6 +154,7 @@ public class HtmlView extends SpriteVisualElement implements IViewport {
 
 	public function set horizontalScrollPosition(value:Number):void {
 		_html.scrollH=value;
+		dispatchEvent(new PropertyChangeEvent(PropertyChangeEvent.PROPERTY_CHANGE, false, false, null, "horizontalScrollPosition"));
 	}
 
 	public function get verticalScrollPosition():Number {
@@ -162,6 +163,7 @@ public class HtmlView extends SpriteVisualElement implements IViewport {
 
 	public function set verticalScrollPosition(value:Number):void {
 		_html.scrollV=value;
+		dispatchEvent(new PropertyChangeEvent(PropertyChangeEvent.PROPERTY_CHANGE, false, false, null, "verticalScrollPosition"));
 	}
 }
 }

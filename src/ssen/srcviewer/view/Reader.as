@@ -24,6 +24,7 @@ public class Reader extends LRQuadDividedContainer {
 
 	private var bottomBackground:BitmapImage;
 
+	private var searcherOpener:SearcherOpener;
 	private var fileListRefresh:FileListRefresher;
 	private var fileList:FileList;
 	private var fileListScrollbar:VScrollBar;
@@ -70,8 +71,10 @@ public class Reader extends LRQuadDividedContainer {
 		// bottom left
 		fileListRefresh=new FileListRefresher;
 		srcManagerOpener=new SrcManagerOpener;
+		searcherOpener=new SearcherOpener;
 		addElement(fileListRefresh);
 		addElement(srcManagerOpener);
+		addElement(searcherOpener);
 
 		// bottom right
 		docLocationOpener=new DocLocationOpener;
@@ -107,8 +110,11 @@ public class Reader extends LRQuadDividedContainer {
 		fileListRefresh.x=space.x + 10;
 		fileListRefresh.y=space.y + int(space.height / 2) - int(fileListRefresh.height / 2);
 
-		srcManagerOpener.x=space.x + int(space.width / 2) - int(srcManagerOpener.width / 2);
-		srcManagerOpener.y=space.y + int(space.height / 2) - int(srcManagerOpener.height / 2);
+		searcherOpener.x=space.x + int(space.width / 2) - int((searcherOpener.width + srcManagerOpener.width) / 2);
+		searcherOpener.y=space.y + int(space.height / 2) - int(searcherOpener.height / 2);
+
+		srcManagerOpener.x=searcherOpener.x + searcherOpener.width;
+		srcManagerOpener.y=searcherOpener.y;
 	}
 
 	override protected function updateSpaceOfBottomRight(space:Rectangle):void {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Window xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" addedToStage="initialContext()"
-		  xmlns:tracers="ssen.devkit.tracers.*" xmlns:devkit="ssen.devkit.*" implements="ssen.mvc.IContextView" width="1500" height="950"
-		  showStatusBar="false" close="closeWindow(event)">
+		  xmlns:tracers="ssen.devkit.tracers.*" xmlns:devkit="ssen.devkit.*" implements="ssen.mvc.IContextView" showStatusBar="false"
+		  close="closeWindow(event)">
 
 	<fx:Script>
 		<![CDATA[
@@ -28,6 +28,10 @@
 
 			private function closeWindow(event:Event):void {
 				newWindowCallback=null;
+
+				var so:SharedObject=SharedObject.getLocal("srcwindow");
+				so.data.windowWidth=width;
+				so.data.windowHeight=height;
 			}
 
 			private function stageKeyUpHandler(event:KeyboardEvent):void {

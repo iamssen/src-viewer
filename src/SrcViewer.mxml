@@ -3,6 +3,8 @@
 					   showStatusBar="false">
 	<fx:Script>
 		<![CDATA[
+			import ssen.airkit.update.AIRUpdate;
+			import ssen.airkit.update.AIRUpdateState;
 			import ssen.srcviewer.SrcViewerWindow;
 			import ssen.srcviewer.model.SrcModel;
 			import ssen.srcviewer.view.LRHexaDivededContainer;
@@ -16,11 +18,13 @@
 			private var ssen_uikit_containers_LeftAndRightSplitContainer_obj:ssen.srcviewer.view.LRHexaDivededContainer;
 
 			private var ssen_srcviewer_view_Reader_obj:ssen.srcviewer.view.Reader;
+			private var update:AIRUpdate;
 
 			private function invokeHandler(event:InvokeEvent):void {
 				_invokeArguments=event.arguments;
 
-				if (_initialized) {
+				if (_initialized || Capabilities.isDebugger) {
+					close();
 					createWindow();
 				} else {
 					checkUpdate();
@@ -32,10 +36,9 @@
 			// 2. 업데이트 체크
 			private function checkUpdate():void {
 				// update check
-
-				// if update 를 안해도 될때
-				close();
-				createWindow();
+				update=new AIRUpdate("https://github.com/iamssen/SrcViewer/raw/master/bin/update.xml");
+				update.addEventListener(Event.INIT, updateInit);
+				update.check();
 			}
 
 			// 3. Window 만들기
@@ -58,16 +61,36 @@
 			}
 
 			private function registerWindow(model:SrcModel):void {
+				var so:SharedObject=SharedObject.getLocal("srcwindow");
+				var windowWidth:int=(so.data.windowWidth !== undefined) ? so.data.windowWidth : 1200;
+				var windowHeight:int=(so.data.windowHeight !== undefined) ? so.data.windowHeight : 920;
+
 				var window:SrcViewerWindow;
 				window=new SrcViewerWindow;
 				window.srcmodel=model;
 				window.newWindowCallback=openNewWindow;
+				window.width=windowWidth;
+				window.height=windowHeight;
 				window.open();
 			}
 
 			private function openNewWindow():void {
 				registerWindow(new SrcModel);
 			}
+
+			private function updateInit(event:Event):void {
+				if (update.state === AIRUpdateState.AVAILABLE) {
+					update.update();
+				} else {
+					close();
+					createWindow();
+				}
+			}
 		]]>
 	</fx:Script>
+
+	<fx:Declarations>
+		<!--<update:AIRUpdate id="update" updateURL="http://12.28.200.201:7011/KPI/air/update.xml" init="update_initHandler(event)"/>-->
+	</fx:Declarations>
+
 </s:WindowedApplication>

@@ -1,4 +1,5 @@
 package ssen.srcviewer.model {
+import de.polygonal.ds.DLL;
 import de.polygonal.ds.TreeNode;
 
 import flash.events.Event;
@@ -16,8 +17,13 @@ import ssen.datakit.tokens.IAsyncToken;
 import ssen.srcviewer.model.filetypes.DocFile;
 
 final public class SrcModel implements IDisposable {
+
+	[Inject]
+	public var docmodel:DocModel;
+
 	private var srcFolderList:Vector.<File>;
 	private var srcViewFile:File;
+	private var _docmodel:DocModel;
 
 	public function hasSrcViewFile():Boolean {
 		return srcViewFile !== null;
@@ -214,6 +220,7 @@ final public class SrcModel implements IDisposable {
 	// tree
 	//----------------------------------------------------------------
 	public function getSrcTree():IAsyncToken {
+		docmodel.clearDocs();
 		return FolderToTreeConverter.convert(srcFolderList, null, appendFileNodeWith);
 	}
 
@@ -235,10 +242,24 @@ final public class SrcModel implements IDisposable {
 		var doc:Doc;
 
 		if (gnode === null) {
+			var path:DLL=new DLL;
+			var n:TreeNode=node;
+
+			while (!n.isRoot()) {
+				path.prepend(n.val);
+				n=n.parent;
+			}
+
+			path.append(gname);
+
 			doc=new Doc(gname);
+			doc.namespace=path.join(".");
+
 			gnode=new TreeNode("@" + gname);
 			gnode.appendNode(new TreeNode(doc));
 			node.appendNode(gnode);
+
+			docmodel.addDoc(doc);
 		} else {
 			doc=gnode.getChildAt(0).val as Doc;
 		}

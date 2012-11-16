@@ -12,6 +12,8 @@ import ssen.srcviewer.view.FileChooser;
 import ssen.srcviewer.view.FileList;
 import ssen.srcviewer.view.FileListRefresher;
 import ssen.srcviewer.view.Reader;
+import ssen.srcviewer.view.Searcher;
+import ssen.srcviewer.view.SearcherOpener;
 import ssen.srcviewer.view.SrcManager;
 import ssen.srcviewer.view.SrcManagerOpener;
 import ssen.srcviewer.view.SrcViewerWindowMediator;
@@ -28,8 +30,10 @@ public class SrcViewerWindowContext extends Context {
 
 	/** @inheritDoc */
 	override protected function mapDependency():void {
-		injector.mapValue(SrcModel, _srcmodel);
 		injector.mapSingleton(DocModel);
+		injector.mapValue(SrcModel, _srcmodel);
+		
+		injector.injectInto(_srcmodel);
 		//		injector.mapSingleton(DocViewer);
 
 		commandMap.mapCommand(ViewEvent.OPEN_DOCS_LOCATION, new <Class>[OpenDocsLocation]);
@@ -47,6 +51,7 @@ public class SrcViewerWindowContext extends Context {
 		// bottom left
 		viewInjector.mapView(FileListRefresher);
 		viewInjector.mapView(SrcManagerOpener);
+		viewInjector.mapView(SearcherOpener);
 
 		// middle left
 		viewInjector.mapView(FileList);
@@ -59,9 +64,10 @@ public class SrcViewerWindowContext extends Context {
 		viewInjector.mapView(DocViewer);
 
 		//----------------------------------------------------------------
-		// view inject :: src manager
+		// view inject :: popups
 		//----------------------------------------------------------------
 		viewInjector.mapView(SrcManager);
+		viewInjector.mapView(Searcher);
 	}
 
 	/** @inheritDoc */
