@@ -1,7 +1,7 @@
 package ssen.srcviewer.services {
-import ssen.datakit.tokens.IAsyncToken;
+import ssen.common.IAsyncUnit;
 
 public interface IFileService {
-	function getFileList():IAsyncToken;
+	function getFileList():IAsyncUnit;
 }
 }

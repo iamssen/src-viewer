@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Window xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" addedToStage="initialContext()"
 		  xmlns:tracers="ssen.devkit.tracers.*" xmlns:devkit="ssen.devkit.*" implements="ssen.mvc.IContextView" showStatusBar="false"
-		  close="closeWindow(event)">
+		  close="closeWindow(event)" xmlns:assets="ssen.srcviewer.assets.*" title="Src Viewer">
 
 	<fx:Script>
 		<![CDATA[
@@ -41,4 +41,8 @@
 			}
 		]]>
 	</fx:Script>
+
+	<fx:Declarations>
+		<assets:FontAssetLoader/>
+	</fx:Declarations>
 </s:Window>

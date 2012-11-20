@@ -21,9 +21,9 @@
 		</s:fill>
 	</s:Rect>
 
-	<s:Rect left="7" top="2" right="2" bottom="2">
+	<s:Rect left="4" top="2" right="4" bottom="2">
 		<s:fill>
-			<s:SolidColor color="0x000000" alpha="0.1" alpha.over="0.4" alpha.down="0.8"/>
+			<s:SolidColor color="0x000000" alpha="0.1" alpha.over="0.2" alpha.down="0.5"/>
 		</s:fill>
 	</s:Rect>
 

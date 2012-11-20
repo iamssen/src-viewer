@@ -1,9 +1,15 @@
 package ssen.srcviewer {
+import flash.system.Capabilities;
+
 import ssen.mvc.Context;
 import ssen.mvc.IContext;
 import ssen.mvc.IContextView;
 import ssen.srcviewer.commands.OpenDocsLocation;
 import ssen.srcviewer.model.DocModel;
+import ssen.srcviewer.model.IScript;
+import ssen.srcviewer.model.ScriptImplEn;
+import ssen.srcviewer.model.ScriptImplKo;
+import ssen.srcviewer.model.SearchModel;
 import ssen.srcviewer.model.SrcModel;
 import ssen.srcviewer.view.DocLocationOpener;
 import ssen.srcviewer.view.DocRefresher;
@@ -13,7 +19,6 @@ import ssen.srcviewer.view.FileList;
 import ssen.srcviewer.view.FileListRefresher;
 import ssen.srcviewer.view.Reader;
 import ssen.srcviewer.view.Searcher;
-import ssen.srcviewer.view.SearcherOpener;
 import ssen.srcviewer.view.SrcManager;
 import ssen.srcviewer.view.SrcManagerOpener;
 import ssen.srcviewer.view.SrcViewerWindowMediator;
@@ -31,11 +36,26 @@ public class SrcViewerWindowContext extends Context {
 	/** @inheritDoc */
 	override protected function mapDependency():void {
 		injector.mapSingleton(DocModel);
+		injector.mapSingleton(SearchModel);
 		injector.mapValue(SrcModel, _srcmodel);
-		
-		injector.injectInto(_srcmodel);
-		//		injector.mapSingleton(DocViewer);
 
+		switch (Capabilities.language) {
+			case "ko":
+				injector.mapSingletonOf(IScript, ScriptImplKo);
+				break;
+			default:
+				injector.mapSingletonOf(IScript, ScriptImplEn);
+				break;
+		}
+
+		//----------------------------------------------------------------
+		// inject
+		//----------------------------------------------------------------
+		injector.injectInto(_srcmodel);
+
+		//----------------------------------------------------------------
+		// command map
+		//----------------------------------------------------------------
 		commandMap.mapCommand(ViewEvent.OPEN_DOCS_LOCATION, new <Class>[OpenDocsLocation]);
 
 		//----------------------------------------------------------------
@@ -51,10 +71,10 @@ public class SrcViewerWindowContext extends Context {
 		// bottom left
 		viewInjector.mapView(FileListRefresher);
 		viewInjector.mapView(SrcManagerOpener);
-		viewInjector.mapView(SearcherOpener);
 
 		// middle left
 		viewInjector.mapView(FileList);
+		viewInjector.mapView(Searcher);
 
 		// bottom right
 		viewInjector.mapView(DocLocationOpener);
@@ -67,7 +87,6 @@ public class SrcViewerWindowContext extends Context {
 		// view inject :: popups
 		//----------------------------------------------------------------
 		viewInjector.mapView(SrcManager);
-		viewInjector.mapView(Searcher);
 	}
 
 	/** @inheritDoc */

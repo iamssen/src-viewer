@@ -13,13 +13,16 @@ import ssen.common.IDisposable;
 import ssen.common.MathUtils;
 import ssen.datakit.file.FileUtils;
 import ssen.datakit.file.FolderToTreeConverter;
-import ssen.datakit.tokens.IAsyncToken;
+import ssen.common.IAsyncUnit;
 import ssen.srcviewer.model.filetypes.DocFile;
 
 final public class SrcModel implements IDisposable {
 
 	[Inject]
 	public var docmodel:DocModel;
+
+	[Inject]
+	public var script:IScript;
 
 	private var srcFolderList:Vector.<File>;
 	private var srcViewFile:File;
@@ -125,7 +128,7 @@ final public class SrcModel implements IDisposable {
 				addHistory(srcfile);
 			});
 		};
-		creator.create(File.userDirectory, "Create Src View File");
+		creator.create(File.userDirectory, script.selectSrcViewFileForCreate);
 	}
 
 	public function openSrcViewFile(result:Function):void {
@@ -144,7 +147,7 @@ final public class SrcModel implements IDisposable {
 
 			addHistory(srcfile);
 		};
-		opener.open(File.userDirectory, "Open Src View File", SrcViewFileFilter.get());
+		opener.open(File.userDirectory, script.selectSrcViewFileForOpen, SrcViewFileFilter.get());
 	}
 
 	public function readSrcViewFile(path:String, result:Function):void {
@@ -189,7 +192,7 @@ final public class SrcModel implements IDisposable {
 				result(false);
 			}
 		};
-		opener.open(File.userDirectory, "Add Src Directory");
+		opener.open(File.userDirectory, script.chooseYourOneDirectoryForAddedToSrcViewFile);
 	}
 
 	public function removeSrcFolder(srcfolder:File, result:Function):void {
@@ -219,7 +222,7 @@ final public class SrcModel implements IDisposable {
 	//----------------------------------------------------------------
 	// tree
 	//----------------------------------------------------------------
-	public function getSrcTree():IAsyncToken {
+	public function getSrcTree():IAsyncUnit {
 		docmodel.clearDocs();
 		return FolderToTreeConverter.convert(srcFolderList, null, appendFileNodeWith);
 	}

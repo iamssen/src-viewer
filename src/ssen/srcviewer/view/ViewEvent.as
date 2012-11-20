@@ -9,8 +9,6 @@ public class ViewEvent extends Event {
 	public static const CLOSE_SRC_MANAGER:String="closeSrcManager";
 	public static const OPEN_DOCS_LOCATION:String="openDocsLocation";
 	public static const REFRESH_DOC:String="refreshDoc";
-	public static const OPEN_SEARCHER:String="openSearcher";
-	public static const CLOSE_SEARCHER:String="closeSearcher";
 
 	public function ViewEvent(type:String) {
 		super(type, false, false);

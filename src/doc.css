@@ -60,7 +60,6 @@ pre code {
  **************************************************************************/
 code[class*="language-"], pre[class*="language-"] {
 	color: black;
-	text-shadow: 0 1px white;
 	direction: ltr;
 	text-align: left;
 	white-space: pre;

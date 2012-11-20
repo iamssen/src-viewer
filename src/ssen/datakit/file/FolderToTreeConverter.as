@@ -5,10 +5,10 @@ import de.polygonal.ds.TreeNode;
 
 import flash.filesystem.File;
 
-import ssen.datakit.tokens.IAsyncToken;
+import ssen.common.IAsyncUnit;
 
 public class FolderToTreeConverter {
-	public static function convert(srcList:Vector.<File>, root:TreeNode=null, appendLastNodeWith:Function=null):IAsyncToken {
+	public static function convert(srcList:Vector.<File>, root:TreeNode=null, appendLastNodeWith:Function=null):IAsyncUnit {
 		return new Reader(srcList, root, appendLastNodeWith);
 	}
 
@@ -29,7 +29,7 @@ public class FolderToTreeConverter {
 		file.nativePath="E:\\Workspace\\LyndaDownloader\\src";
 		folders.push(file);
 
-		var token:IAsyncToken=new Reader(folders);
+		var token:IAsyncUnit=new Reader(folders);
 		token.result=function(root:TreeNode):void {
 			trace("SrcListToTreeNode.test.result()", root);
 		};
@@ -60,9 +60,9 @@ import flash.events.FileListEvent;
 import flash.filesystem.File;
 
 import ssen.common.StringUtils;
-import ssen.datakit.tokens.IAsyncToken;
+import ssen.common.IAsyncUnit;
 
-class Reader implements IAsyncToken {
+class Reader implements IAsyncUnit {
 	private var queue:Queue;
 	private var _root:TreeNode;
 	private var _fault:Function;
@@ -178,7 +178,7 @@ class Reader implements IAsyncToken {
 }
 
 
-class Ticket implements IAsyncToken {
+class Ticket implements IAsyncUnit {
 	public var node:TreeNode;
 	public var folder:File;
 	public var readFolder:Function;
