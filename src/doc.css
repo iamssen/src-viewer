@@ -1,8 +1,8 @@
 html, body {
 	margin: 0px;
-	font-size: 14px;
+	font-size: 13px;
 	line-height: 160%;
-	font-family: MalgunGothic, NanumGothic, Arial, Helvetica, sans-serif;
+	font-family: NanumGothic,'Malgun Gothic', Arial, Helvetica, sans-serif;
 	background-image: url(html.back2.png);
 	background-position: top left;
 	background-repeat: repeat;
@@ -30,7 +30,7 @@ h1.paper-title {
  * Code
  **************************************************************************/
 code, pre code {
-	font-family: Consolas, Monaco, Andale Mono, Courier New, monospace;
+	font-family: Consolas, Monaco, Andale Mono, Courier New, monospace, NanumGothic, 'Malgun Gothic', Arial, Helvetica, sans-serif;
 }
 code {
 	background-color: #fee9cc;
@@ -44,7 +44,6 @@ pre {
 	display: block;
 	padding: 14px;
 	margin: 0 0 18px;
-	line-height: 16px;
 	border: 1px solid #d9d9d9;
 	white-space: pre-wrap;
 	word-wrap: break-word;
@@ -147,7 +146,6 @@ pre[data-line] {
 	background: -o-linear-gradient(left, hsla(24, 20%, 50%,.1) 70%, hsla(24, 20%, 50%,0));
 	background: linear-gradient(left, hsla(24, 20%, 50%,.1) 70%, hsla(24, 20%, 50%,0));
 	pointer-events: none;
-	line-height: inherit;
 	white-space: pre;
 }
 
@@ -252,7 +250,6 @@ blockquote:before {
 blockquote p {
 	font-size: 14px;
 	font-weight: 300;
-	line-height: 18px;
 	margin-bottom: 0;
 	font-style: italic;
 }

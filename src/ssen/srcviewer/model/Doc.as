@@ -87,9 +87,9 @@ public class Doc {
 						}
 					}
 					
-					codes+='<pre><code class="language-' + dfile.highlighterType + '"><xmp>' + dfile.getSource() + '</xmp></code></pre></div>';
+					codes+='<pre><code class="language-' + dfile.highlighterType + '"><xmp>' + fixHtmlSpecialCharacters(dfile.getSource()) + '</xmp></code></pre></div>';
 				} else {
-					examples+='<h1 class="paper-title">' + dfile.name + "." + dfile.extension + '</h1><div class="paper"><pre><code class="language-' + dfile.highlighterType + '"><xmp>' + dfile.getSource() + '</xmp></code></pre></div>';
+					examples+='<h1 class="paper-title">' + dfile.name + "." + dfile.extension + '</h1><div class="paper"><pre><code class="language-' + dfile.highlighterType + '"><xmp>' + fixHtmlSpecialCharacters(dfile.getSource()) + '</xmp></code></pre></div>';
 				}
 				
 				
@@ -101,6 +101,13 @@ public class Doc {
 		
 		//		trace("Doc.toHtml()", source);
 		
+		return source;
+	}
+	
+	private function fixHtmlSpecialCharacters(source:String):String {
+//		source=source.replace(/</g, "&lt;");
+//		source=source.replace(/>/g, "&gt;");
+		source=source.replace(/<\/xmp/g, "<／xmp");
 		return source;
 	}
 	
