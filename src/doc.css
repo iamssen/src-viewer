@@ -213,6 +213,8 @@ h1, h2, h3, h4, h5, h6 {
 h1 {
 	margin-bottom: 18px;
 	font-size: 30px;
+	border-bottom: 2px dashed #cccccc;
+	padding-bttom: 4px;
 }
 h2 {
 	font-size: 24px;
