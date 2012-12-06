@@ -6,19 +6,19 @@
 			import ssen.mvc.IEventBus;
 			import ssen.srcviewer.model.DocEvent;
 			import ssen.srcviewer.model.DocModel;
-
+			
 			[Inject]
 			public var eventBus:IEventBus;
-
+			
 			[Inject]
 			public var docmodel:DocModel;
-
+			
 			public function onDependent():void {
 				eventBus.addEventListener(DocEvent.CHANGED_DOC, drawDoc);
 				eventBus.addEventListener(ViewEvent.REFRESH_DOC, drawDoc);
 			}
-
-			private function drawDoc(event:Event):void {
+			
+			private function drawDoc(event:DocEvent):void {
 				if (docmodel.currentDoc !== null) {
 					htmlview.loadString(docmodel.currentDoc.toHtml());
 				}

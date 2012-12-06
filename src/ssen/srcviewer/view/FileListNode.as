@@ -17,7 +17,7 @@ import spark.core.SpriteVisualElement;
 import ssen.common.IDisposable;
 import ssen.mvc.IEventBus;
 import ssen.srcviewer.view.text.Fonts;
-import ssen.uikit.text.TextStyler;
+import ssen.displaykit.text.TextStyler;
 
 public class FileListNode extends SpriteVisualElement implements IDisposable {
 	[Embed(source="assets/left.doc.png")]

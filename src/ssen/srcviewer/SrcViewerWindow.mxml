@@ -29,6 +29,13 @@
 				}
 			}
 			
+			/** @inheritDoc */
+			public function getStage():Object {
+				return stage;
+			}
+			
+			
+			
 			private function closeWindow(event:Event):void {
 				newWindowCallback=null;
 			}

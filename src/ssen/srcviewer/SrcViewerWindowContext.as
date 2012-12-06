@@ -1,7 +1,7 @@
 package ssen.srcviewer {
 import flash.system.Capabilities;
 
-import ssen.mvc.Context;
+import ssen.displaykit.Context;
 import ssen.mvc.IContext;
 import ssen.mvc.IContextView;
 import ssen.srcviewer.commands.OpenDocsLocation;

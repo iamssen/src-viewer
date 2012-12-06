@@ -1,23 +1,15 @@
 package ssen.srcviewer.model {
-import flash.events.Event;
+import ssen.mvc.Evt;
 
-public class DocEvent extends Event {
+public class DocEvent extends Evt {
 	public static const OPEN_DOC:String="openDoc";
 	public static const CHANGED_DOC:String="changedDoc";
-
+	
 	public var doc:Doc;
-
+	
 	public function DocEvent(type:String, doc:Doc=null) {
-		super(type, false, false);
+		super(type);
 		this.doc=doc;
 	}
-
-	override public function clone():Event {
-		var evt:DocEvent=new DocEvent(type, doc);
-		return evt;
-	}
-
-
-
 }
 }

@@ -1,7 +1,7 @@
 package ssen.srcviewer.view.text {
 import flash.text.engine.FontLookup;
 
-import ssen.uikit.text.IFont;
+import ssen.displaykit.text.IFont;
 
 public class Fonts implements IFont {
 	public static const YGO530:Fonts=new Fonts("ygo530", FontLookup.EMBEDDED_CFF);

@@ -1,17 +1,11 @@
 package ssen.srcviewer.model {
-import flash.events.Event;
+import ssen.mvc.Evt;
 
-public class SearchEvent extends Event {
+public class SearchEvent extends Evt {
 	public static const CHANGED_KEYWORD:String="changedKeyword";
-
+	
 	public function SearchEvent(type:String) {
-		super(type, false, false);
+		super(type);
 	}
-
-	override public function clone():Event {
-		return new SearchEvent(type);
-	}
-
-
 }
 }
