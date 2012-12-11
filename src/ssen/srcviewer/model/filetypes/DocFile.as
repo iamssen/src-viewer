@@ -10,26 +10,19 @@ public class DocFile {
 	private static var wikiwikiExtensions:Vector.<String>=new <String>["md", "markdown"];
 	private static var codeExtensions:Vector.<String>=new <String>["as", "mxml", "css", "js", "json", "xml", "htm", "html", "xhtml", "py",
 																   "rb", "java", "php"];
+	private static var processingExtension:String="pde";
 	
 	public static function getDocFile(file:File):DocFile {
 		var dfile:DocFile;
 		var filename:String=file.name;
 		var extension:String=file.extension;
 		
-		if (wikiwikiExtensions.indexOf(extension) > -1) {
+		if (processingExtension === extension) {
+			dfile=new ProcessingScript;
+		} else if (wikiwikiExtensions.indexOf(extension) > -1) {
 			dfile=new Wiki;
 		} else if (codeExtensions.indexOf(extension) > -1) {
-			if (filename.search("__Example") > -1) {
-				dfile=new Example;
-			} else {
-				//				if (extension === "as") {
-				//					dfile=new ActionScript;
-				//				} else {
-				//					dfile=new Code;
-				//				}
-				
-				dfile=new Code;
-			}
+			dfile=new Code;
 		}
 		
 		if (dfile !== null) {
@@ -37,6 +30,7 @@ public class DocFile {
 			dfile.extension=extension;
 			dfile.file=file;
 			dfile.highlighterType=getPrismjsType(extension);
+			dfile.isExample=filename.indexOf("__") > -1;
 			
 			return dfile;
 		}
@@ -48,6 +42,7 @@ public class DocFile {
 	public var name:String;
 	public var extension:String;
 	public var highlighterType:String;
+	public var isExample:Boolean;
 	
 	public function getSource():String {
 		var stream:FileStream=new FileStream;

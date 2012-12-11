@@ -1,14 +1,10 @@
 package ssen.srcviewer.view {
-import de.polygonal.ds.Itr;
 import de.polygonal.ds.TreeNode;
 
 import flash.events.MouseEvent;
 
 import ssen.srcviewer.model.Doc;
 import ssen.srcviewer.model.DocEvent;
-import ssen.srcviewer.model.filetypes.Code;
-import ssen.srcviewer.model.filetypes.DocFile;
-import ssen.srcviewer.model.filetypes.Example;
 
 public class FileListDocNode extends FileListNode {
 	private var _doc:Doc;

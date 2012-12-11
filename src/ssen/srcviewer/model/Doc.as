@@ -8,6 +8,7 @@ import ssen.common.MathUtils;
 import ssen.common.StringUtils;
 import ssen.srcviewer.model.filetypes.Code;
 import ssen.srcviewer.model.filetypes.DocFile;
+import ssen.srcviewer.model.filetypes.ProcessingScript;
 import ssen.srcviewer.model.filetypes.Wiki;
 
 
@@ -56,7 +57,9 @@ public class Doc {
 		var wikis:String='';
 		var codes:String='';
 		var examples:String='';
+		var theory:String='';
 		var api:String;
+		var str:String;
 		
 		while (files.hasNext()) {
 			dfile=files.next() as DocFile;
@@ -68,13 +71,22 @@ public class Doc {
 				}
 				
 				hash=MathUtils.randHex(10);
-				wikis+='<h1 class="paper-title">' + dfile.name + "." + dfile.extension + '</h1><div class="paper"><xmp type="text/markdown" to="' + hash + '" style="display:none;">\n' + dfile.getSource() + '\n</xmp><div class="markdown" id="' + hash + '"></div></div>';
-			} else {
+				
+				str='<h1 class="paper-title">' + dfile.name + "." + dfile.extension + '</h1><div class="paper"><xmp type="text/markdown" to="' + hash + '" style="display:none;">\n' + dfile.getSource() + '\n</xmp><div class="markdown" id="' + hash + '"></div></div>';
+				
+				if (dfile.isExample) {
+					theory+=str;
+				} else {
+					wikis+=str;
+				}
+			} else if (dfile is Code) {
 				if (!baseIsWiki) {
 					base=dfile.file.parent.nativePath;
 				}
 				
-				if (dfile is Code) {
+				if (dfile.isExample) {
+					examples+='<h1 class="paper-title">' + dfile.name + "." + dfile.extension + '</h1><div class="paper"><pre><code class="language-' + dfile.highlighterType + '"><xmp>' + fixHtmlSpecialCharacters(dfile.getSource()) + '</xmp></code></pre></div>';
+				} else {
 					codes+='<h1 class="paper-title">' + dfile.name + "." + dfile.extension + '</h1><div class="paper">';
 					
 					if (dfile.hasAPI()) {
@@ -88,16 +100,17 @@ public class Doc {
 					}
 					
 					codes+='<pre><code class="language-' + dfile.highlighterType + '"><xmp>' + fixHtmlSpecialCharacters(dfile.getSource()) + '</xmp></code></pre></div>';
-				} else {
-					examples+='<h1 class="paper-title">' + dfile.name + "." + dfile.extension + '</h1><div class="paper"><pre><code class="language-' + dfile.highlighterType + '"><xmp>' + fixHtmlSpecialCharacters(dfile.getSource()) + '</xmp></code></pre></div>';
+					
 				}
+			} else if (dfile is ProcessingScript) {
+				str='<h1 class="paper-title">' + dfile.name + "." + dfile.extension + '</h1><div class="paper"><script type="application/processing">' + dfile.getSource() + '</script><canvas></canvas><pre><code class="language-' + dfile.highlighterType + '"><xmp>' + fixHtmlSpecialCharacters(dfile.getSource()) + '</xmp></code></pre></div>';
 				
-				
+				examples+=str;
 			}
 		}
 		
 		var source:String='<!DOCTYPE html><html><head><base href="file:///' + base.replace(/\\/g,
-																						   "/") + '/" /><link href="app:/doc.css" rel="stylesheet" /><script src="app:/showdown.js" type="application/javascript"></script></head><body>' + wikis + codes + examples + '<script src="app:/prism.js" data-default-language="none"></script><script src="app:/doc.js"></script></body></html>';
+																						   "/") + '/" /><link href="app:/doc.css" rel="stylesheet" /><script src="app:/showdown.js" type="application/javascript"></script><script src="app:/processing-1.4.1.min.js" type="application/javascript"></script></head><body>' + wikis + theory + codes + examples + '<script src="app:/prism.js" data-default-language="none"></script><script src="app:/doc.js"></script></body></html>';
 		
 		//		trace("Doc.toHtml()", source);
 		
@@ -105,8 +118,8 @@ public class Doc {
 	}
 	
 	private function fixHtmlSpecialCharacters(source:String):String {
-//		source=source.replace(/</g, "&lt;");
-//		source=source.replace(/>/g, "&gt;");
+		//		source=source.replace(/</g, "&lt;");
+		//		source=source.replace(/>/g, "&gt;");
 		source=source.replace(/<\/xmp/g, "<／xmp");
 		return source;
 	}
