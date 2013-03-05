@@ -8,8 +8,7 @@ import ssen.devkit.DevUtils;
 
 public class DocFile {
 	private static var wikiwikiExtensions:Vector.<String>=new <String>["md", "markdown"];
-	private static var codeExtensions:Vector.<String>=new <String>["as", "mxml", "css", "js", "json", "xml", "htm", "html", "xhtml", "py",
-																   "rb", "java", "php"];
+	private static var codeExtensions:Vector.<String>=new <String>["as", "mxml", "css", "js", "json", "xml", "htm", "html", "xhtml", "py", "rb", "java", "php"];
 	private static var processingExtension:String="pde";
 	
 	public static function getDocFile(file:File):DocFile {

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
-<application xmlns="http://ns.adobe.com/air/application/3.1">
+<application xmlns="http://ns.adobe.com/air/application/3.4">
     <id>SrcViewer</id>
     <filename>SrcViewer</filename>
-    <name>SrcViewer</name>
-    <versionNumber>0.1.2</versionNumber>
-    <versionLabel>beta</versionLabel>
+    <name/>
+    <versionNumber>0.1.10</versionNumber>
+    <versionLabel>beta 0.1.10</versionLabel>
     <!-- <description></description> -->
     <!-- <copyright></copyright> -->
     <!-- <publisherID>SSen</publisherID> -->

@@ -4,7 +4,7 @@
 		<![CDATA[
 			import de.polygonal.ds.Itr;
 			import de.polygonal.ds.TreeNode;
-
+			
 			import ssen.common.AlternateValues;
 			import ssen.common.IAsyncUnit;
 			import ssen.mvc.IEventBus;
@@ -14,31 +14,31 @@
 			import ssen.srcviewer.model.SearchModel;
 			import ssen.srcviewer.model.SrcModel;
 			import ssen.srcviewer.view.pool.FileListNodePool;
-
+			
 			[Inject]
 			public var srcmodel:SrcModel;
-
+			
 			[Inject]
 			public var searchmodel:SearchModel;
-
+			
 			[Inject]
 			public var eventBus:IEventBus;
-
+			
 			[Inject]
 			public var injector:IInjector;
-
+			
 			private var fnodeTemps:Vector.<FileListNodeTemp>;
 			private var fnodes:Vector.<FileListNode>;
 			private var tree:TreeNode;
-			private var keyword:String;
-			private var hasKeyword:Boolean;
-
+			private var keywords:Vector.<String>;
+			private var wikiOnly:Boolean;
+			
 			public function onDependent():void {
 				eventBus.addEventListener(ViewEvent.REFRESH_LIST, refreshList);
 				eventBus.addEventListener(SearchEvent.CHANGED_KEYWORD, changedKeyword);
 				refreshList();
 			}
-
+			
 			private function refreshList(event:ViewEvent=null):void {
 				var token:IAsyncUnit=srcmodel.getSrcTree();
 				token.result=function(root:TreeNode):void {
@@ -46,41 +46,41 @@
 					callLater(createNodes);
 				};
 			}
-
+			
 			private function createNodes():void {
 				// clear nodes
 				verticalScrollPosition=0;
 				removeAllElements();
-
+				
 				if (fnodes !== null) {
 					FileListNodePool.getInstance().putNodes(fnodes);
 					fnodes.length=0;
 				} else {
 					fnodes=new Vector.<FileListNode>;
 				}
-
+				
 				// create nodes
 				if (tree !== null) {
 					fnodeTemps=new Vector.<FileListNodeTemp>;
-
+					
 					tree.preorder(treeloop);
-
+					
 					var temp:FileListNodeTemp;
 					var fnode:FileListNode;
-
+					
 					var f:int=-1;
 					var fmax:int=fnodeTemps.length;
-
+					
 					while (++f < fmax) {
 						temp=fnodeTemps[f];
-
+						
 						if (temp.isDoc) {
 							fnode=FileListNodePool.getInstance().getNode(true);
 						} else {
 							fnode=getFolderNode(temp.node);
 						}
-
-
+						
+						
 						if (fnode) {
 							fnode.eventBus=eventBus;
 							fnode.setNode(temp.node);
@@ -90,32 +90,32 @@
 					}
 				}
 			}
-
+			
 			private function getFolderNode(node:TreeNode):FileListNode {
 				var itr:Itr=node.iterator();
 				var val:*;
-
+				
 				while (itr.hasNext()) {
 					val=itr.next();
-
+					
 					if (val is Doc) {
 						if (Doc(val).visible) {
 							return FileListNodePool.getInstance().getNode(false);
 						}
 					}
 				}
-
+				
 				return null;
 			}
-
+			
 			private function treeloop(node:TreeNode, preflight:Boolean, userData:Dynamic):Boolean {
 				if (!node.isRoot()) {
 					var temp:FileListNodeTemp;
-
+					
 					if (node.isLeaf() && node.val is Doc) {
 						var doc:Doc=node.val as Doc;
-
-						if (!hasKeyword || doc.name.toLowerCase().search(keyword) > -1) {
+						
+						if (matchKeyword(doc)) {
 							temp=new FileListNodeTemp;
 							temp.isDoc=true;
 							doc.visible=true;
@@ -126,46 +126,49 @@
 						temp=new FileListNodeTemp;
 						temp.isDoc=false;
 					}
-
+					
 					if (temp) {
 						temp.node=node;
 						fnodeTemps.push(temp);
 					}
 				}
-
+				
 				return true;
 			}
-
-			private function treeloopfoo(node:TreeNode, preflight:Boolean, userData:Dynamic):Boolean {
-				if (!node.isRoot()) {
-					var fnode:FileListNode;
-
-					if (node.isLeaf() && node.val is Doc) {
-						var doc:Doc=node.val as Doc;
-
-						if (!hasKeyword || doc.name.toLowerCase().search(keyword) > -1) {
-							fnode=FileListNodePool.getInstance().getNode(true);
-						} else {
-							doc.visible=false;
-						}
-					} else if (node.hasChildren() && node.val.toString().charAt(0) !== "@") {
-						fnode=FileListNodePool.getInstance().getNode(false);
-					}
-
-					if (fnode) {
-						fnode.eventBus=eventBus;
-						fnode.setNode(node);
-						addElement(fnode);
-						fnodes.push(fnode);
+			
+			private function matchKeyword(doc:Doc):Boolean {
+				if (wikiOnly && !doc.hasWiki()) {
+					return false;
+				}
+				
+				if (keywords === null || keywords.length === 0) {
+					return true;
+				}
+				
+				var f:int=keywords.length;
+				var keyword:String;
+				while (--f >= 0) {
+					keyword=keywords[f];
+					
+					if (doc.name.toLowerCase().search(keyword) > -1) {
+						return true;
 					}
 				}
-
-				return true;
+				
+				return false;
 			}
-
+			
 			private function changedKeyword(event:SearchEvent):void {
-				keyword=AlternateValues.blankTo(searchmodel.keyword, null);
-				hasKeyword=keyword !== null;
+				var k:String=AlternateValues.blankTo(searchmodel.keyword, "");
+				k=k.replace(/(\s+)/g, " ");
+				keywords=Vector.<String>(k.split(" "));
+				
+				var wikiindex:int=keywords.indexOf("#wiki");
+				wikiOnly=wikiindex > -1;
+				if (wikiOnly) {
+					keywords.splice(wikiindex, 1);
+				}
+				
 				callLater(createNodes);
 			}
 		]]>

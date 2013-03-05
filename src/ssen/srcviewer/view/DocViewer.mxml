@@ -3,6 +3,7 @@
 		 xmlns:components="ssen.uikit.components.*">
 	<fx:Script>
 		<![CDATA[
+			import ssen.mvc.Evt;
 			import ssen.mvc.IEventBus;
 			import ssen.srcviewer.model.DocEvent;
 			import ssen.srcviewer.model.DocModel;
@@ -18,7 +19,7 @@
 				eventBus.addEventListener(ViewEvent.REFRESH_DOC, drawDoc);
 			}
 			
-			private function drawDoc(event:DocEvent):void {
+			private function drawDoc(event:Evt):void {
 				if (docmodel.currentDoc !== null) {
 					htmlview.loadString(docmodel.currentDoc.toHtml());
 				}

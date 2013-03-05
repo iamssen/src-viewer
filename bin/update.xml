@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <update xmlns="http://ns.adobe.com/air/framework/update/description/2.5">
-    <versionNumber>0.1.2</versionNumber>
+    <versionNumber>0.1.10</versionNumber>
     <url>https://github.com/iamssen/SrcViewer/raw/master/bin/SrcViewer.air</url>
     <description>application 을 업데이트 합니다</description>
     <!--<text xml:lang="en">English description</text>

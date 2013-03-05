@@ -85,7 +85,7 @@ public class Doc {
 				}
 				
 				if (dfile.isExample) {
-					examples+='<h1 class="paper-title">' + dfile.name + "." + dfile.extension + '</h1><div class="paper"><pre><code class="language-' + dfile.highlighterType + '"><xmp>' + fixHtmlSpecialCharacters(dfile.getSource()) + '</xmp></code></pre></div>';
+					examples+='<h1 class="paper-title">' + dfile.name + "." + dfile.extension + '</h1><div class="paper"><pre class="prettyprint"><code><xmp>' + fixHtmlSpecialCharacters(dfile.getSource()) + '</xmp></code></pre></div>';
 				} else {
 					codes+='<h1 class="paper-title">' + dfile.name + "." + dfile.extension + '</h1><div class="paper">';
 					
@@ -99,18 +99,17 @@ public class Doc {
 						}
 					}
 					
-					codes+='<pre><code class="language-' + dfile.highlighterType + '"><xmp>' + fixHtmlSpecialCharacters(dfile.getSource()) + '</xmp></code></pre></div>';
+					codes+='<pre class="prettyprint"><code><xmp>' + fixHtmlSpecialCharacters(dfile.getSource()) + '</xmp></code></pre></div>';
 					
 				}
 			} else if (dfile is ProcessingScript) {
-				str='<h1 class="paper-title">' + dfile.name + "." + dfile.extension + '</h1><div class="paper"><script type="application/processing">' + dfile.getSource() + '</script><canvas></canvas><pre><code class="language-' + dfile.highlighterType + '"><xmp>' + fixHtmlSpecialCharacters(dfile.getSource()) + '</xmp></code></pre></div>';
+				str='<h1 class="paper-title">' + dfile.name + "." + dfile.extension + '</h1><div class="paper"><script type="application/processing">' + dfile.getSource() + '</script><canvas></canvas><pre class="prettyprint"><code><xmp>' + fixHtmlSpecialCharacters(dfile.getSource()) + '</xmp></code></pre></div>';
 				
 				examples+=str;
 			}
 		}
 		
-		var source:String='<!DOCTYPE html><html><head><base href="file:///' + base.replace(/\\/g,
-																						   "/") + '/" /><link href="app:/doc.css" rel="stylesheet" /><script src="app:/showdown.js" type="application/javascript"></script><script src="app:/processing-1.4.1.min.js" type="application/javascript"></script></head><body>' + wikis + theory + codes + examples + '<script src="app:/prism.js" data-default-language="none"></script><script src="app:/doc.js"></script></body></html>';
+		var source:String='<!DOCTYPE html><html><head><base href="file:///' + base.replace(/\\/g, "/") + '/" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><link href="app:/doc.css" rel="stylesheet" /><link href="app:/markdown.css" rel="stylesheet" /><link href="app:/prettify.css" rel="stylesheet" /><script src="app:/prettify.js" type="application/javascript"></script><script src="app:/showdown.js" type="application/javascript"></script><script src="app:/showdown.github.js" type="application/javascript"></script><script src="app:/showdown.prettify.js" type="application/javascript"></script><script src="app:/showdown.table.js" type="application/javascript"></script><script src="app:/processing-1.4.1.min.js" type="application/javascript"></script></head><body>' + wikis + theory + codes + examples + '<script src="app:/doc.js"></script></body></html>';
 		
 		//		trace("Doc.toHtml()", source);
 		
@@ -121,6 +120,7 @@ public class Doc {
 		//		source=source.replace(/</g, "&lt;");
 		//		source=source.replace(/>/g, "&gt;");
 		source=source.replace(/<\/xmp/g, "<／xmp");
+		source=source.replace(/\t/g, "    ");
 		return source;
 	}
 	
