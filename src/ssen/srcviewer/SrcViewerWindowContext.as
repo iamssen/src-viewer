@@ -41,10 +41,10 @@ public class SrcViewerWindowContext extends Context {
 
 		switch (Capabilities.language) {
 			case "ko":
-				injector.mapSingletonOf(IScript, ScriptImplKo);
+				injector.mapSingleton(IScript, ScriptImplKo);
 				break;
 			default:
-				injector.mapSingletonOf(IScript, ScriptImplEn);
+				injector.mapSingleton(IScript, ScriptImplEn);
 				break;
 		}
 
@@ -86,7 +86,7 @@ public class SrcViewerWindowContext extends Context {
 		//----------------------------------------------------------------
 		// view inject :: popups
 		//----------------------------------------------------------------
-		viewInjector.mapView(SrcManager);
+		viewInjector.mapView(SrcManager, null, true);
 	}
 
 	/** @inheritDoc */

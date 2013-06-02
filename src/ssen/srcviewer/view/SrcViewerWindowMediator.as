@@ -5,7 +5,6 @@ import mx.managers.PopUpManager;
 import ssen.mvc.EvtUnitManager;
 import ssen.mvc.IEventBus;
 import ssen.mvc.IMediator;
-import ssen.mvc.IViewOuterBridge;
 import ssen.srcviewer.SrcViewerWindow;
 import ssen.srcviewer.model.DocEvent;
 import ssen.srcviewer.model.DocModel;
@@ -13,9 +12,6 @@ import ssen.srcviewer.model.DocModel;
 public class SrcViewerWindowMediator implements IMediator {
 	[Inject]
 	public var eventBus:IEventBus;
-	
-	[Inject]
-	public var viewOuterBridge:IViewOuterBridge;
 	
 	[Inject]
 	public var docmodel:DocModel;
@@ -49,8 +45,6 @@ public class SrcViewerWindowMediator implements IMediator {
 	
 	private function openSrcManager(event:ViewEvent):void {
 		srcManager=new SrcManager;
-		
-		viewOuterBridge.ready(srcManager);
 		
 		PopUpManager.addPopUp(srcManager, view, true);
 		PopUpManager.centerPopUp(srcManager);
