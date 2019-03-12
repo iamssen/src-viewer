@@ -2,7 +2,7 @@ package ssen.srcviewer.view {
 import mx.core.IVisualElement;
 import mx.managers.PopUpManager;
 
-import ssen.mvc.EvtUnitManager;
+import ssen.mvc.EvtGatherer;
 import ssen.mvc.IEventBus;
 import ssen.mvc.IMediator;
 import ssen.srcviewer.SrcViewerWindow;
@@ -20,14 +20,14 @@ public class SrcViewerWindowMediator implements IMediator {
 	private var subView:IVisualElement;
 	private var srcManager:SrcManager;
 	
-	private var evtUnits:EvtUnitManager;
+	private var evtUnits:EvtGatherer;
 	
 	public function setView(value:Object):void {
 		view=value as SrcViewerWindow;
 	}
 	
 	public function onRegister():void {
-		evtUnits=new EvtUnitManager;
+		evtUnits=new EvtGatherer;
 		evtUnits.add(eventBus.addEventListener(ViewEvent.OPEN_SRC_VIEW_FILE_CHOOSER, openSrcViewFileChooser));
 		evtUnits.add(eventBus.addEventListener(ViewEvent.OPEN_SRC_READER, openSrcReader));
 		evtUnits.add(eventBus.addEventListener(ViewEvent.OPEN_SRC_MANAGER, openSrcManager));
