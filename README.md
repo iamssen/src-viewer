@@ -1,4 +1,6 @@
-SrcReader
-=========
+AIR Runtime Application
 
-src folder reader
+`/src` 디렉토리 내부의 소스코드들과 Markdown 파일을 좀 더 쉽게 보기 위해 만들었다.
+
+소스코드에 대한 설명을 `*.md`에 포함시키고, 소스코드들과 함께 본다는 발상에서 만들었었다.
+(당시 Eclipse 시절이었어서 `*.md` 파일을 볼 방법도 마땅치 않았었고...)
